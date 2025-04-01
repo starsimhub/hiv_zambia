@@ -57,7 +57,7 @@ def plot_hiv_sims(df, start_year=2000, end_year=2025, which='single', percentile
 
     # HIV prevalence
     ax = axes[pn]
-    resname = 'hiv_prevalence'
+    resname = 'hiv_prevalence_15_49'
     ax.scatter(hiv_data.year, hiv_data[resname] * 100, label='Data', color='k')
     x = dfplot.index
     y = get_y(dfplot, which, resname)
