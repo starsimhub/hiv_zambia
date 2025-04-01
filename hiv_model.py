@@ -47,6 +47,9 @@ def make_sim(seed=1, n_agents=None, dt=1/12, start=1990, stop=2030, debug=False,
         p_pair_form=0.58,
         condom_data=pd.read_csv(f'data/condom_use.csv'),
     )
+    msm = sti.AgeMatchedMSM(
+        participation_rate=0.1,
+    )
     maternal = ss.MaternalNet(unit='month')
 
     ####################################################################################################################
@@ -64,7 +67,7 @@ def make_sim(seed=1, n_agents=None, dt=1/12, start=1990, stop=2030, debug=False,
         stop=stop,
         people=ppl,
         diseases=diseases,
-        networks=[sexual, maternal],
+        networks=[sexual, msm, maternal],
         demographics=[pregnancy, death],
         interventions=intvs,
         analyzers=analyzers,

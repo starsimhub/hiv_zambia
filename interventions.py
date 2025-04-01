@@ -32,6 +32,27 @@ def get_testing_products():
         label='fsw_testing',
     )
 
+    # # Draft code for adding a syphilis test
+    # fsw_syph_testing = sti.SyphTest(
+    #     years=years,
+    #     test_prob_data=fsw_prob,
+    #     name='fsw_testing',
+    #     eligibility=fsw_eligibility,
+    #     label='fsw_testing',
+    # )
+
+    # # Draft code to add a syphtest for HIV+
+    # def hiv_eligibility(sim):
+    #     return sim.diseases.hiv.on_art
+    #
+    # syph_testing = sti.SyphTest(
+    #     years=[2025],
+    #     test_prob_data=[0.5],
+    #     name='syph_testing',
+    #     eligibility=hiv_eligibility,
+    #     label='syph_testing',
+    # )
+
     # Non-FSW agents who haven't been diagnosed or treated yet
     def other_eligibility(sim):
         return ~sim.networks.structuredsexual.fsw & ~sim.diseases.hiv.diagnosed & ~sim.diseases.hiv.on_art
@@ -56,7 +77,7 @@ def get_testing_products():
         label='low_cd4_testing',
     )
 
-    return fsw_testing, other_testing, low_cd4_testing
+    return fsw_testing, other_testing, low_cd4_testing,  # fsw_syph_testing
 
 
 def make_hiv_intvs():
@@ -66,7 +87,11 @@ def make_hiv_intvs():
     fsw_testing, other_testing, low_cd4_testing = get_testing_products()
     art = sti.ART(coverage_data=n_art, future_coverage={'year': 2024, 'prop': 0.97})
     # vmmc = sti.VMMC(coverage_data=n_vmmc)
-    prep = sti.Prep()
+    prep = sti.Prep(
+        coverage=[0, 0.01, 0.5, 0.8],
+        years=[2004, 2005, 2015, 2025],
+        eff_prep=0.8,
+    )
 
     interventions = [
         fsw_testing,
