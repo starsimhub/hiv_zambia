@@ -10,6 +10,7 @@ import pandas as pd
 import stisim as sti
 from interventions import make_hiv_intvs
 
+
 def make_hiv():
     """ Make HIV arguments for sim"""
     hiv = sti.HIV(
@@ -21,11 +22,10 @@ def make_hiv():
     return hiv
 
 
-def make_sim(seed=1, n_agents=None, dt=1/12, start=1990, stop=2030, debug=False, verbose=1/12, analyzers=None):
+def make_sim(seed=1, n_agents=None, start=1990, stop=2030, debug=False, verbose=1/12, analyzers=None):
 
     total_pop = {1990: 7.786e6}[start]
     if n_agents is None: n_agents = [int(10e3), int(5e2)][debug]
-    if dt is None: dt = [1/12, 1][debug]
 
     ####################################################################################################################
     # Demographic modules
@@ -39,7 +39,7 @@ def make_sim(seed=1, n_agents=None, dt=1/12, start=1990, stop=2030, debug=False,
     # People and networks
     ####################################################################################################################
     ppl = ss.People(n_agents, age_data=pd.read_csv(f'data/age_dist_{start}.csv', index_col='age')['value'])
-    sexual = sti.FastStructuredSexual(
+    sexual = sti.StructuredSexual(
         prop_f0=0.79,
         prop_m0=0.83,
         f1_conc=0.16,
@@ -47,9 +47,9 @@ def make_sim(seed=1, n_agents=None, dt=1/12, start=1990, stop=2030, debug=False,
         p_pair_form=0.58,
         condom_data=pd.read_csv(f'data/condom_use.csv'),
     )
-    msm = sti.AgeMatchedMSM(
-        participation_rate=0.1,
-    )
+    # msm = sti.AgeMatchedMSM(
+    #     participation=0.1,
+    # )
     maternal = ss.MaternalNet(unit='month')
 
     ####################################################################################################################
@@ -59,15 +59,13 @@ def make_sim(seed=1, n_agents=None, dt=1/12, start=1990, stop=2030, debug=False,
     diseases = [hiv]
     intvs = make_hiv_intvs()
 
-    sim = ss.Sim(
-        dt=dt,
-        rand_seed=seed,
+    sim = sti.Sim(
         total_pop=total_pop,
         start=start,
         stop=stop,
         people=ppl,
         diseases=diseases,
-        networks=[sexual, msm, maternal],
+        networks=[sexual, maternal],
         demographics=[pregnancy, death],
         interventions=intvs,
         analyzers=analyzers,
