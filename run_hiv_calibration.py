@@ -29,7 +29,7 @@ make_stats = True  # Whether to make stats
 
 
 def build_sim(sim, calib_pars):
-
+    if not sim.initialized: sim.init()
     hiv = sim.diseases.hiv
     nw = sim.networks.structuredsexual
 
@@ -68,7 +68,7 @@ def run_calibration(n_trials=None, n_workers=None, do_save=True):
     )
 
     # Make the sim
-    sim = make_sim(start=1990, stop=2030, verbose=-1, seed=1)
+    sim = make_sim()
     data = pd.read_csv('data/zambia_hiv_calib.csv')
     extra_results = ['hiv_n_diagnosed', 'hiv_n_on_art', 'n_alive']
 

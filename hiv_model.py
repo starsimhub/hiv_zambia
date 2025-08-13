@@ -6,25 +6,28 @@ Create HIV model and interventions
 import sciris as sc
 import pandas as pd
 import stisim as sti
+import starsim as ss
 from interventions import make_hiv_intvs
+ss.options.warnings = 'error'
 
 
 def make_sim(verbose=1/12, analyzers=None):
 
     nw_pars = dict(
-        prop_f0=0.79,
-        prop_m0=0.83,
-        f1_conc=0.16,
-        m1_conc=0.11,
-        p_pair_form=0.58,
+        prop_f0=0.75,
+        prop_m0=0.6,
+        f1_conc=0.1,
+        m1_conc=0.2,
+        p_pair_form=0.5,
         condom_data=pd.read_csv(f'data/condom_use.csv'),
     )
 
     hiv = sti.HIV(
-        beta_m2f=0.1,
-        eff_condom=0.95,
+        beta_m2f=0.15,
+        eff_condom=0.9,
+        dist_ti_init_infected = ss.uniform(low=-24, high=0),
         init_prev_data=pd.read_csv('data/init_prev_hiv.csv'),
-        rel_init_prev=5.,
+        rel_init_prev=20.,
     )
 
     intvs = make_hiv_intvs()
@@ -60,7 +63,7 @@ if __name__ == '__main__':
     df.index = df['timevec']
 
     from plot_sims import plot_hiv_sims
-    plot_hiv_sims(df, title='hiv_plots')
+    plot_hiv_sims(df, start_year=1990, title='hiv_plots')
 
     if do_save: sc.saveobj(f'results/zambia_sim.df', df)
 
