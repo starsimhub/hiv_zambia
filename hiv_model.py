@@ -14,11 +14,11 @@ ss.options.warnings = 'error'
 def make_sim(verbose=1/12, analyzers=None):
 
     nw_pars = dict(
-        prop_f0=0.75,
-        prop_m0=0.6,
-        f1_conc=0.1,
-        m1_conc=0.2,
-        p_pair_form=0.5,
+        prop_f0=0.79,
+        prop_m0=0.83,
+        f1_conc=0.16,
+        m1_conc=0.11,
+        p_pair_form=0.58,
         condom_data=pd.read_csv(f'data/condom_use.csv'),
     )
 
