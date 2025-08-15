@@ -57,7 +57,8 @@ if __name__ == '__main__':
 
     sim = make_sim(start=1990, stop=2041)
     sim.run()
-    df = sim.to_df(resample='year', use_years=True, sep='.')  # Use dots to separate columns
+    df = sim.to_df(resample='year', use_years=True, sep='_')  # Use dots to separate columns
+    df.index = df['timevec']
     if do_save: sc.saveobj(f'results/zambia_sim.df', df)
 
     if do_plot:
