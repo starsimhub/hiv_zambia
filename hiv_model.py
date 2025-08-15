@@ -8,12 +8,12 @@ import pandas as pd
 import stisim as sti
 import starsim as ss
 from interventions import make_hiv_intvs
-ss.options.warnings = 'error'
+# ss.options.warnings = 'error'
 
 
 def make_sim(verbose=1/12, analyzers=None):
 
-    nw_pars = dict(
+    nw = sti.StructuredSexual(
         prop_f0=0.79,
         prop_m0=0.83,
         f1_conc=0.16,
@@ -38,7 +38,7 @@ def make_sim(verbose=1/12, analyzers=None):
         datafolder='data/',
         demographics='zambia',
         diseases=hiv,
-        nw_pars=nw_pars,
+        networks=[nw, ss.MaternalNet()],
         interventions=intvs,
         analyzers=analyzers,
         verbose=verbose,
