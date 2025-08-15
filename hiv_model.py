@@ -8,26 +8,25 @@ import pandas as pd
 import stisim as sti
 import starsim as ss
 from interventions import make_hiv_intvs
-ss.options.warnings = 'error'
+# ss.options.warnings = 'error'
 
 
 def make_sim(verbose=1/12, analyzers=None):
 
-    nw_pars = dict(
-        prop_f0=0.75,
-        prop_m0=0.6,
-        f1_conc=0.1,
-        m1_conc=0.2,
-        p_pair_form=0.5,
+    nw = sti.StructuredSexual(
+        prop_f0=0.79,
+        prop_m0=0.83,
+        f1_conc=0.16,
+        m1_conc=0.11,
+        p_pair_form=0.58,
         condom_data=pd.read_csv(f'data/condom_use.csv'),
     )
 
     hiv = sti.HIV(
-        beta_m2f=0.15,
-        eff_condom=0.9,
-        dist_ti_init_infected = ss.uniform(low=-24, high=0),
+        beta_m2f=0.035,
+        eff_condom=0.95,
         init_prev_data=pd.read_csv('data/init_prev_hiv.csv'),
-        rel_init_prev=20.,
+        rel_init_prev=1.,
     )
 
     intvs = make_hiv_intvs()
@@ -39,7 +38,7 @@ def make_sim(verbose=1/12, analyzers=None):
         datafolder='data/',
         demographics='zambia',
         diseases=hiv,
-        nw_pars=nw_pars,
+        networks=[nw, ss.MaternalNet()],
         interventions=intvs,
         analyzers=analyzers,
         verbose=verbose,
