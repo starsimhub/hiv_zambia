@@ -23,11 +23,10 @@ def make_sim(verbose=1/12, analyzers=None):
     )
 
     hiv = sti.HIV(
-        beta_m2f=0.15,
-        eff_condom=0.9,
-        dist_ti_init_infected = ss.uniform(low=-24, high=0),
+        beta_m2f=0.035,
+        eff_condom=0.95,
         init_prev_data=pd.read_csv('data/init_prev_hiv.csv'),
-        rel_init_prev=20.,
+        rel_init_prev=1.,
     )
 
     intvs = make_hiv_intvs()
