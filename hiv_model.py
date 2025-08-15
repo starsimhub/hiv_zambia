@@ -33,7 +33,7 @@ def make_sim(n_agents=10e3, start=1990, stop=2030, verbose=1/12, analyzers=None)
 
     sim = sti.Sim(
         n_agents=n_agents,
-        datafolder='/data',
+        datafolder='data/',
         location='zambia',
         start=start,
         stop=stop,
