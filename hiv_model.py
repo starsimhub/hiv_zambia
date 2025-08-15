@@ -36,6 +36,7 @@ def make_sim(verbose=1/12, analyzers=None):
         n_agents=10e3,
         start=1990,
         stop=2030,
+        datafolder='data/',
         demographics='zambia',
         diseases=hiv,
         nw_pars=nw_pars,
