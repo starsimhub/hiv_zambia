@@ -15,25 +15,25 @@ def make_sim(verbose=1/12, analyzers=None):
 
     nw = sti.StructuredSexual(
         prop_f0=0.79,
-        prop_m0=0.83,
-        f1_conc=0.16,
-        m1_conc=0.11,
-        p_pair_form=0.58,
+        prop_m0=0.75,
+        f1_conc=0.15,
+        m1_conc=0.15,
+        p_pair_form=0.5,
         condom_data=pd.read_csv(f'data/condom_use.csv'),
     )
 
     hiv = sti.HIV(
-        beta_m2f=0.035,
-        eff_condom=0.95,
+        beta_m2f=0.012,
+        eff_condom=0.5,
         init_prev_data=pd.read_csv('data/init_prev_hiv.csv'),
-        rel_init_prev=1.,
+        rel_init_prev=.5,
     )
 
     intvs = make_hiv_intvs()
 
     sim = sti.Sim(
         n_agents=10e3,
-        start=1990,
+        start=1985,
         stop=2030,
         datafolder='data/',
         demographics='zambia',
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     df.index = df['timevec']
 
     from plot_sims import plot_hiv_sims
-    plot_hiv_sims(df, start_year=1990, title='hiv_plots')
+    plot_hiv_sims(df, start_year=1985, title='hiv_plots')
 
     if do_save: sc.saveobj(f'results/zambia_sim.df', df)
 
