@@ -172,18 +172,20 @@ if __name__ == '__main__':
     use_calib = True
 
     to_run = [
-        # 'run_sim',
-        'run_msim',
+        'run_sim',
+        # 'run_msim',
     ]
 
     if 'run_sim' in to_run:
 
         if do_run:
-            sim = make_sim(use_calib=use_calib)
+            sim = make_sim(use_calib=use_calib, analyze_network=True)
             sim.run()
             df = sim.to_df(resample='year', use_years=True, sep='_')  # Use dots to separate columns
             df.index = df['timevec']
-            if do_save: sc.saveobj(f'results/zambia_sim.df', df)
+            if do_save:
+                sc.saveobj(f'results/zambia_sim.df', df)
+                sc.saveobj(f'results/zambia.sim', sim)
         else:
             df = sc.loadobj(f'results/zambia_sim.df')
 

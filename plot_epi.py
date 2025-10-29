@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
     # Initialize plot
     set_font(size=20)
-    fig, axes = pl.subplots(1, 3, figsize=(15, 6))
+    fig, axes = pl.subplots(2, 3, figsize=(15, 10))
     color = sc.vectocolor([.5, .8, 1])[1]
     axes = axes.ravel()
     scolors = ['#ee7989', '#4682b4']
@@ -96,6 +96,34 @@ if __name__ == '__main__':
     ax.set_xlabel('')
     ax.legend(frameon=False, prop={'size': 16})
     ax.set_ylim(bottom=0)
+
+    # Plot a histogram of the time from exposure to diagnosis
+    sim = sc.loadobj('results/zambia.sim')
+    dx_uids = sim.people.hiv.diagnosed.uids
+    dx_times = sim.people.hiv.ti_diagnosed[dx_uids] - sim.people.hiv.ti_exposed[dx_uids]
+    ax = axes[3]
+    ax.hist(dx_times/12, bins=30, color=color, edgecolor='k', alpha=0.7)
+    ax.set_title('Time from HIV exposure to diagnosis')
+    ax.set_xlabel('Years')
+    ax.set_ylabel('')
+    ax.set_xlim(left=0)
+
+    # Histogram of CD4 count at diagnosis
+    cd4_counts = sim.people.hiv.cd4_preart[dx_uids]
+    ax = axes[4]
+    ax.hist(cd4_counts, bins=30, color=color, edgecolor='k', alpha=0.7)
+    ax.set_title('CD4 count at HIV diagnosis')
+    ax.set_xlabel('CD4 count (cells/µL)')
+    ax.set_ylabel('')
+
+    # Histogram of current CD4 counts across infected people
+    inf_uids = sim.people.hiv.infected.uids
+    cd4_counts = sim.people.hiv.cd4[inf_uids]
+    ax = axes[5]
+    ax.hist(cd4_counts, bins=30, color=color, edgecolor='k', alpha=0.7)
+    ax.set_title('CD4 counts among PLHIV')
+    ax.set_xlabel('CD4 count (cells/µL)')
+    ax.set_ylabel('')
 
     sc.figlayout()
     sc.savefig("figures/hiv_epi.png", dpi=100)
