@@ -87,6 +87,7 @@ def make_sim(verbose=1/12, analyzers=None, use_calib=True, analyze_network=False
         analyzers += sti.RelationshipDurations()
         analyzers += sti.DebutAge()
         analyzers += sti.partner_age_diff()
+        analyzers += sti.sw_stats(diseases=['hiv'])
 
     # If using calibration parameters, update the simulation
     if use_calib:
@@ -99,13 +100,13 @@ def make_sim(verbose=1/12, analyzers=None, use_calib=True, analyze_network=False
     return sim
 
 
-def run_msim(use_calib=True, n_pars=1, seed=1, debug=False, do_save=True):
+def run_msim(use_calib=True, n_pars=1, do_save=True):
 
     # Mave individual sims
     sims = sc.autolist()
 
     for par_idx in range(n_pars):
-        sim = make_sim(use_calib=use_calib, par_idx=par_idx, seed=seed, debug=debug)
+        sim = make_sim(use_calib=use_calib, par_idx=par_idx)
         sim.par_idx = par_idx
         sims += sim
     sims = ss.parallel(sims).sims
@@ -130,7 +131,6 @@ def save_stats(sims, resfolder='results'):
     for sim in sims:
 
         par_idx = sim.par_idx
-        df = sim.to_df(resample='year', use_years=True, sep='.')
 
         # Save age/sex epi results
         age_bins = sim.diseases.hiv.age_bins
@@ -172,8 +172,8 @@ if __name__ == '__main__':
     use_calib = True
 
     to_run = [
-        'run_sim',
-        # 'run_msim',
+        # 'run_sim',
+        'run_msim',
     ]
 
     if 'run_sim' in to_run:
@@ -191,4 +191,12 @@ if __name__ == '__main__':
             from plot_sims import plot_hiv_sims
             plot_hiv_sims(df, start_year=1985, title='hiv_plots')
 
+    if 'run_msim' in to_run:
+        n_pars = 50 if not debug else 2
+        if do_run:
+            sims = run_msim(use_calib=use_calib, n_pars=n_pars, do_save=do_save)
+        else:
+            sims = None
 
+        if do_save and sims is not None:
+            save_stats(sims, resfolder='results')
