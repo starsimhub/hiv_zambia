@@ -67,6 +67,15 @@ def make_sim(verbose=1/12, analyzers=None, use_calib=True, analyze_network=False
 
     intvs = make_hiv_intvs()
 
+    # Add network analyzers
+    analyzers = sc.autolist(analyzers)
+    analyzers += sti.sw_stats(diseases=['hiv'])
+    if analyze_network:
+        analyzers += sti.NetworkDegree(relationship_types=['partners', 'stable', 'casual'])
+        analyzers += sti.RelationshipDurations()
+        analyzers += sti.DebutAge()
+        analyzers += sti.partner_age_diff()
+
     sim = sti.Sim(
         n_agents=10e3,
         start=1985,
@@ -79,15 +88,6 @@ def make_sim(verbose=1/12, analyzers=None, use_calib=True, analyze_network=False
         analyzers=analyzers,
         verbose=verbose,
     )
-
-    # Add network analyzers
-    analyzers = sc.autolist(analyzers)
-    analyzers += sti.sw_stats(diseases=['hiv'])
-    if analyze_network:
-        analyzers += sti.NetworkDegree(relationship_types=['partners', 'stable', 'casual'])
-        analyzers += sti.RelationshipDurations()
-        analyzers += sti.DebutAge()
-        analyzers += sti.partner_age_diff()
 
     # If using calibration parameters, update the simulation
     if use_calib:
