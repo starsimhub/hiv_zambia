@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     # Plot settings
     plot_kwargs = dict(
-        start_year=2000,
+        start_year=1985,
         end_year=2025,
         which='multi',
         percentile_pairs=percentile_pairs,

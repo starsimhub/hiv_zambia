@@ -15,7 +15,7 @@ os.environ.update(
 import sciris as sc
 import stisim as sti
 import pandas as pd
-from hiv_model import make_sim
+from hiv_model import make_sim, make_sim_pars
 
 
 # Run settings
@@ -28,38 +28,11 @@ do_shrink = True  # Whether to shrink the calibration results
 make_stats = True  # Whether to make stats
 
 
-def build_sim(sim, calib_pars):
-    if not sim.initialized: sim.init()
-    hiv = sim.diseases.hiv
-    nw = sim.networks.structuredsexual
-
-    # Apply the calibration parameters
-    for k, pars in calib_pars.items():  # Loop over the calibration parameters
-        if k == 'rand_seed':
-            sim.pars.rand_seed = v
-            continue
-
-        v = pars['value']
-        if 'hiv_' in k:  # HIV parameters
-            k = k.replace('hiv_', '')  # Strip off indentifying part of parameter name
-            hiv.pars[k] = v
-        elif 'nw_' in k:  # Network parameters
-            k = k.replace('nw_', '')  # As above
-            if 'pair_form' in k:
-                nw.pars[k].set(v)
-            else:
-                nw.pars[k] = v
-        else:
-            raise NotImplementedError(f'Parameter {k} not recognized')
-
-    return sim
-
-
 def run_calibration(n_trials=None, n_workers=None, do_save=True):
 
     # Define the calibration parameters
     calib_pars = dict(
-        hiv_beta_m2f=dict(low=0.01, high=0.10, guess=0.05),
+        hiv_beta_m2f=dict(low=0.008, high=0.02, guess=0.012),
         nw_prop_f0 = dict(low=0.55, high=0.9, guess=0.85),
         nw_prop_m0 = dict(low=0.50, high=0.9, guess=0.81),
         nw_f1_conc = dict(low=0.01, high=0.2, guess=0.01),
@@ -68,14 +41,14 @@ def run_calibration(n_trials=None, n_workers=None, do_save=True):
     )
 
     # Make the sim
-    sim = make_sim()
+    sim = make_sim(verbose=-1)
     data = pd.read_csv('data/zambia_hiv_calib.csv')
     extra_results = ['hiv_n_diagnosed', 'hiv_n_on_art', 'n_alive']
 
     # Make the calibration
     calib = sti.Calibration(
         calib_pars=calib_pars,
-        build_fn=build_sim,
+        build_fn=make_sim_pars,
         sim=sim,
         extra_results=extra_results,
         data=data,
