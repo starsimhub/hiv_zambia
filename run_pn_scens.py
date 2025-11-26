@@ -29,7 +29,7 @@ def make_pn_pars(pnc=None, pnp=None, pac=None, pap=None):
     return pn_pars
 
 
-def run_pn_scens(stop=2040, parallel=True):
+def run_pn_scens(stop=2051, parallel=True):
     """
     Run analyses
     """
