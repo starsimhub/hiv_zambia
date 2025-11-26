@@ -47,7 +47,7 @@ def make_sim_pars(sim, calib_pars):
     return sim
 
 
-def make_sim(verbose=1/12, analyzers=None, use_calib=True, analyze_network=False, par_idx=0):
+def make_sim(seed=1, stop=2030, verbose=1/12, analyzers=None, use_calib=True, pn_pars=None, analyze_network=False, par_idx=0):
 
     nw = sti.StructuredSexual(
         prop_f0=0.79,
@@ -57,6 +57,7 @@ def make_sim(verbose=1/12, analyzers=None, use_calib=True, analyze_network=False
         p_pair_form=0.5,
         condom_data=pd.read_csv(f'data/condom_use.csv'),
     )
+    priorpartners = sti.PriorPartners(dur_recall=ss.years(0.25))
 
     hiv = sti.HIV(
         beta_m2f=0.012,
@@ -65,7 +66,7 @@ def make_sim(verbose=1/12, analyzers=None, use_calib=True, analyze_network=False
         rel_init_prev=.5,
     )
 
-    intvs = make_hiv_intvs()
+    intvs = make_hiv_intvs(pn_pars=pn_pars)
 
     # Add network analyzers
     analyzers = sc.autolist(analyzers)
@@ -79,11 +80,12 @@ def make_sim(verbose=1/12, analyzers=None, use_calib=True, analyze_network=False
     sim = sti.Sim(
         n_agents=10e3,
         start=1985,
-        stop=2030,
+        stop=stop,
         datafolder='data/',
         demographics='zambia',
         diseases=hiv,
-        networks=[nw, ss.MaternalNet()],
+        rand_seed=seed,
+        networks=[nw, priorpartners, ss.MaternalNet()],
         interventions=intvs,
         analyzers=analyzers,
         verbose=verbose,
@@ -179,7 +181,9 @@ if __name__ == '__main__':
     if 'run_sim' in to_run:
 
         if do_run:
-            sim = make_sim(use_calib=use_calib, analyze_network=True)
+            from run_pn_scens import make_pn_pars
+            pn_pars = make_pn_pars(pnc=0.1, pnp=0, pac=0.1, pap=0)
+            sim = make_sim(use_calib=use_calib, analyze_network=True, pn_pars=pn_pars, verbose=1/12)
             sim.run()
             df = sim.to_df(resample='year', use_years=True, sep='_')  # Use dots to separate columns
             df.index = df['timevec']
