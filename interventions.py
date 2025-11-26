@@ -15,11 +15,11 @@ def get_testing_products():
     Define HIV products and testing interventions
     """
     scaleup_years = np.arange(1990, 2021)  # Years for testing
-    years = np.arange(1990, 2041)  # Years for simulation
+    years = np.arange(1990, 2051)  # Years for simulation
     n_years = len(scaleup_years)
     fsw_prob = np.concatenate([np.linspace(0, 0.75, n_years), np.linspace(0.75, 0.85, len(years) - n_years)])
     low_cd4_prob = np.concatenate([np.linspace(0, 0.85, n_years), np.linspace(0.85, 0.95, len(years) - n_years)])
-    gp_prob = np.concatenate([np.linspace(0, 0.5, n_years), np.linspace(0.5, 0.6, len(years) - n_years)])
+    gp_prob = np.concatenate([np.linspace(0, 0.1, n_years), np.linspace(0.1, 0.1, len(years) - n_years)])
 
     # FSW agents who haven't been diagnosed or treated yet
     def fsw_eligibility(sim):
@@ -59,6 +59,7 @@ def get_testing_products():
 
     partner_testing = sti.HIVTest(
         years=years,
+        test_prob_data=0.9,
         name='partner_testing',
         eligibility=ss.uids(),  # Set by partner notification intervention
         label='partner_testing',
@@ -184,7 +185,7 @@ def make_hiv_intvs(pn_pars=None):
         # Optionally add partner notification
         # Partner treatment eligibility
         def just_diagnosed(sim):
-            """ Return UIDs of people who have just been diagnosed """
+            """ Return UIDs of people who have just been diagnosed - could add recency test here too  """
             new_diagnoses = (sim.diseases.hiv.ti_diagnosed == sim.diseases.hiv.ti).uids
             # previous_index = ... # Exclude people who were the original index case
             return new_diagnoses
@@ -200,7 +201,6 @@ def make_hiv_intvs(pn_pars=None):
             pn,
             partner_testing,
         ]
-
 
     interventions += [art, prep]
 
