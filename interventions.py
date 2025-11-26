@@ -174,6 +174,11 @@ def make_hiv_intvs(pn_pars=None):
         years=[2004, 2005, 2015, 2025],
         eff_prep=0.8,
     )
+    interventions = [
+        fsw_testing,
+        other_testing,
+        low_cd4_testing
+    ]
 
     if pn_pars is not None:
         # Optionally add partner notification
@@ -191,15 +196,13 @@ def make_hiv_intvs(pn_pars=None):
             label='notify_partners',
         )
 
-    interventions = [
-        fsw_testing,
-        other_testing,
-        low_cd4_testing,
-        pn,
-        partner_testing,
-        art,
-        prep,
-    ]
+        interventions += [
+            pn,
+            partner_testing,
+        ]
+
+        
+    interventions += [art, prep]
 
     return interventions
 
