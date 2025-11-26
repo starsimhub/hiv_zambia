@@ -47,7 +47,7 @@ def make_sim_pars(sim, calib_pars):
     return sim
 
 
-def make_sim(seed=1, verbose=1/12, analyzers=None, use_calib=True, pn_pars=None, analyze_network=False, par_idx=0):
+def make_sim(seed=1, stop=2030, verbose=1/12, analyzers=None, use_calib=True, pn_pars=None, analyze_network=False, par_idx=0):
 
     nw = sti.StructuredSexual(
         prop_f0=0.79,
@@ -80,7 +80,7 @@ def make_sim(seed=1, verbose=1/12, analyzers=None, use_calib=True, pn_pars=None,
     sim = sti.Sim(
         n_agents=10e3,
         start=1985,
-        stop=2030,
+        stop=stop,
         datafolder='data/',
         demographics='zambia',
         diseases=hiv,
