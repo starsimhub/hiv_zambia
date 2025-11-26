@@ -47,7 +47,7 @@ def make_sim_pars(sim, calib_pars):
     return sim
 
 
-def make_sim(verbose=1/12, analyzers=None, use_calib=True, pn_pars=None, analyze_network=False, par_idx=0):
+def make_sim(seed=1, verbose=1/12, analyzers=None, use_calib=True, pn_pars=None, analyze_network=False, par_idx=0):
 
     nw = sti.StructuredSexual(
         prop_f0=0.79,
