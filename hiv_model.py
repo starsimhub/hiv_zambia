@@ -84,7 +84,7 @@ def make_sim(seed=1, stop=2030, verbose=1/12, analyzers=None, use_calib=True, pn
         datafolder='data/',
         demographics='zambia',
         diseases=hiv,
-        seed=seed,
+        rand_seed=seed,
         networks=[nw, priorpartners, ss.MaternalNet()],
         interventions=intvs,
         analyzers=analyzers,

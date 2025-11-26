@@ -201,7 +201,7 @@ def make_hiv_intvs(pn_pars=None):
             partner_testing,
         ]
 
-        
+
     interventions += [art, prep]
 
     return interventions
