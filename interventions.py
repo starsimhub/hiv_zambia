@@ -60,7 +60,7 @@ def get_testing_products():
     partner_testing = sti.HIVTest(
         years=years,
         name='partner_testing',
-        eligibility=None,  # Set by partner notification intervention
+        eligibility=ss.uids(),  # Set by partner notification intervention
         label='partner_testing',
     )
 
