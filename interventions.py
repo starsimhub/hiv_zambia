@@ -175,20 +175,21 @@ def make_hiv_intvs(pn_pars=None):
         eff_prep=0.8,
     )
 
-    # Optionally add partner notification
-    # Partner treatment eligibility
-    def just_diagnosed(sim):
-        """ Return UIDs of people who have just been diagnosed """
-        new_diagnoses = (sim.diseases.hiv.ti_diagnosed == sim.diseases.hiv.ti).uids
-        # previous_index = ... # Exclude people who were the original index case
-        return new_diagnoses
+    if pn_pars is not None:
+        # Optionally add partner notification
+        # Partner treatment eligibility
+        def just_diagnosed(sim):
+            """ Return UIDs of people who have just been diagnosed """
+            new_diagnoses = (sim.diseases.hiv.ti_diagnosed == sim.diseases.hiv.ti).uids
+            # previous_index = ... # Exclude people who were the original index case
+            return new_diagnoses
 
-    pn = PartnerNotification(
-        **pn_pars,
-        eligibility=just_diagnosed,
-        name='notify_partner',
-        label='notify_partners',
-    )
+        pn = PartnerNotification(
+            **pn_pars,
+            eligibility=just_diagnosed,
+            name='notify_partners',
+            label='notify_partners',
+        )
 
     interventions = [
         fsw_testing,

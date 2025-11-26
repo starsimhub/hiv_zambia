@@ -45,7 +45,7 @@ def run_pn_scens(stop=2051, parallel=True):
     for pnlabel, pn_pars in pndict.items():
 
         for i in range(n_scen_runs):
-            printstr = f"Making sim {pnlabel}"
+            printstr = f"Making sim {pnlabel}, "
             printstr += f"param set {i+1}/{n_scen_runs}"
             print(printstr)
             sim = make_sim(seed=i, pn_pars=pn_pars, stop=stop)
