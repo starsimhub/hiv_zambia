@@ -28,7 +28,8 @@ def plot_scens(df, show=False, savefig=True):
         for scenario in ['Base', 'PN - low', 'PN - med', 'PN - high']:
             idx = pd.IndexSlice
             socdf = df.loc[idx[2020:2040, scenario], f'{disease}.{res}']['50%']
-            socy = socdf.rolling(3, min_periods=1).mean()
+            # socy = socdf.rolling(3, min_periods=1).mean()
+            socy = socdf
             if res == 'prevalence':
                 socy = socy * 100
             socdf = socdf.reset_index()
