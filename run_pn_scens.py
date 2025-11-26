@@ -106,7 +106,7 @@ if __name__ == '__main__':
     # SETTINGS
     debug = False
     seed = 1
-    n_scen_runs = [20, 1][debug]  # Number of parameter sets to run per scenario
+    n_scen_runs = [2, 1][debug]  # Number of parameter sets to run per scenario
     to_run = [
         'run_pn_scens',
         'process_scens',  # Process the scenarios
