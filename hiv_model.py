@@ -11,42 +11,6 @@ from interventions import make_hiv_intvs
 # ss.options.warnings = 'error'
 
 
-def make_sim_pars(sim, calib_pars):
-    if not sim.initialized: sim.init()
-    hiv = sim.diseases.hiv
-    nw = sim.networks.structuredsexual
-
-    # Apply the calibration parameters
-    for k, pars in calib_pars.items():  # Loop over the calibration parameters
-        if k == 'rand_seed':
-            sim.pars.rand_seed = v
-            continue
-
-        elif k in ['index', 'mismatch']:
-            continue
-
-        if isinstance(pars, dict):
-            v = pars['value']
-        elif sc.isnumber(pars):
-            v = pars
-        else:
-            raise NotImplementedError(f'Parameter {k} not recognized')
-
-        if 'hiv_' in k:  # HIV parameters
-            k = k.replace('hiv_', '')  # Strip off indentifying part of parameter name
-            hiv.pars[k] = v
-        elif 'nw_' in k:  # Network parameters
-            k = k.replace('nw_', '')  # As above
-            if 'pair_form' in k:
-                nw.pars[k].set(v)
-            else:
-                nw.pars[k] = v
-        else:
-            raise NotImplementedError(f'Parameter {k} not recognized')
-
-    return sim
-
-
 def make_sim(seed=1, stop=2030, verbose=1/12, analyzers=None, use_calib=True, pn_pars=None, analyze_network=False, par_idx=0):
 
     nw = sti.StructuredSexual(
@@ -95,30 +59,28 @@ def make_sim(seed=1, stop=2030, verbose=1/12, analyzers=None, use_calib=True, pn
     if use_calib:
         calib = sc.loadobj('results/zam_hiv_calib.obj')
         calib_pars = calib.df.iloc[par_idx].to_dict()
-        sim.init()
-        sim = make_sim_pars(sim, calib_pars)
+        sti.set_sim_pars(sim, calib_pars)
         print(f'Using calibration parameters for index {par_idx}')
 
     return sim
 
 
 def run_msim(use_calib=True, n_pars=1, do_save=True):
+    """Run multiple simulations, optionally applying calibration parameters."""
+    base = make_sim(use_calib=False, verbose=-1)
 
-    # Mave individual sims
-    sims = sc.autolist()
-
-    for par_idx in range(n_pars):
-        sim = make_sim(use_calib=use_calib, par_idx=par_idx, verbose=-1)
-        sim.par_idx = par_idx
-        sims += sim
-    sims = ss.parallel(sims).sims
+    if use_calib:
+        calib = sc.loadobj('results/zam_hiv_calib.obj')
+        msim = sti.make_calib_sims(calib_pars=calib.df, sim=base, n_parsets=n_pars)
+    else:
+        msim = sti.make_calib_sims(calib_pars={}, sim=base, seeds_per_par=n_pars)
+    sims = msim.sims
 
     if do_save:
         dfs = sc.autolist()
         for sim in sims:
-            par_idx = sim.par_idx
             df = sim.to_df(resample='year', use_years=True, sep='.')
-            df['res_no'] = par_idx
+            df['res_no'] = sim.par_idx
             dfs += df
         df = pd.concat(dfs)
         sc.saveobj(f'results/msim.df', df)
