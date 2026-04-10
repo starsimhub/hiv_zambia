@@ -166,10 +166,12 @@ class PartnerNotification(ss.Intervention):
 def make_hiv_intvs(pn_pars=None):
 
     n_art = pd.read_csv(f'data/n_art.csv').set_index('year')
+    n_art['p_art'] = np.nan
+    n_art.loc[2024:, 'p_art'] = 0.97  # Switch to proportion target after historical data ends
     # n_vmmc = pd.read_csv(f'data/n_vmmc.csv').set_index('year')
     fsw_testing, other_testing, low_cd4_testing, partner_testing = get_testing_products()
-    art = sti.ART(coverage_data=n_art, future_coverage={'year': 2024, 'prop': 0.97})
-    # vmmc = sti.VMMC(coverage_data=n_vmmc)
+    art = sti.ART(coverage=n_art)
+    # vmmc = sti.VMMC(coverage=n_vmmc)
     prep = sti.Prep(
         coverage=[0, 0.01, 0.5, 0.8],
         years=[2004, 2005, 2015, 2025],
