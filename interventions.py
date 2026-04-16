@@ -65,7 +65,19 @@ def get_testing_products():
         label='partner_testing',
     )
 
-    return fsw_testing, other_testing, low_cd4_testing, partner_testing
+    # ANC testing: test undiagnosed pregnant women in first trimester
+    anc_eligibility = lambda sim: sim.demographics.pregnancy.tri1_uids[
+        ~sim.diseases.hiv.diagnosed[sim.demographics.pregnancy.tri1_uids]
+    ]
+    anc_testing = sti.HIVTest(
+        test_prob_data=0.9,
+        dt_scale=False,
+        name='anc_testing',
+        eligibility=anc_eligibility,
+        label='anc_testing',
+    )
+
+    return fsw_testing, other_testing, low_cd4_testing, partner_testing, anc_testing
 
 
 class PartnerNotification(ss.Intervention):
@@ -169,7 +181,7 @@ def make_hiv_intvs(pn_pars=None):
     n_art['p_art'] = np.nan
     n_art.loc[2024:, 'p_art'] = 0.97  # Switch to proportion target after historical data ends
     # n_vmmc = pd.read_csv(f'data/n_vmmc.csv').set_index('year')
-    fsw_testing, other_testing, low_cd4_testing, partner_testing = get_testing_products()
+    fsw_testing, other_testing, low_cd4_testing, partner_testing, anc_testing = get_testing_products()
     art = sti.ART(coverage=n_art)
     # vmmc = sti.VMMC(coverage=n_vmmc)
     prep = sti.Prep(
@@ -180,7 +192,8 @@ def make_hiv_intvs(pn_pars=None):
     interventions = [
         fsw_testing,
         other_testing,
-        low_cd4_testing
+        low_cd4_testing,
+        anc_testing,
     ]
 
     if pn_pars is not None:
