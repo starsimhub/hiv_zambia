@@ -1,7 +1,7 @@
 # Experiment 03 — constrain `structuredsexual.prop_m0` to biologically plausible range
 
 **Date run:** 2026-09-24.
-**Commit:** `df2187a`.
+**Commit:** `e090086`.
 **Trials / workers:** 1000 / 50. **Ensemble size after shrink:** 500 draws.
 **Sustainability:** 0/500 extinct at 2030 (min prev 15-49 = 3.5% at 2030).
 **Mismatch:** min=26.08, mean=29.79, max=31.50.
