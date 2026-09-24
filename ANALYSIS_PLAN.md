@@ -133,9 +133,26 @@ Work on `main` directly. Commit frequently. Feature branch + PR workflow revisit
 ## Calibration state
 
 Per-experiment fits live in `experiments/NN_epoch/NN_experiment/SUMMARY.md`.
-Current epoch: `experiments/01_post_dedup/`. Latest completed experiment:
-`01_baseline_2026-09-23` (fit not acceptable). In flight:
-`02_open_rel_death_widen_prop_m0`.
+
+**Epoch 01 (`experiments/01_post_dedup/`) — closed 2026-09-24.** Three
+experiments (baseline, opened `rel_death` + widened `prop_m0`,
+constrained `prop_m0` to biological range) plateau at mismatch ~24-31
+with `prop_m0` pegging its upper bound in every case. Residual misfit
+is structural, not a parameter-width problem. See
+[epoch README](experiments/01_post_dedup/README.md) for full synthesis.
+Largest residual signal: **female mid-life prevalence overshoot** at
+ages 25-49 that the current symmetric-transmission parameter set can't
+express. Second: HIV deaths stuck at 6.8k/yr (vs 17k data) across all
+three experiments despite `rel_death` posteriors near the upper prior
+bound.
+
+**Epoch 02 blocked on data.** Waiting on:
+- Zambia VL coverage over time to parameterise `sti.ART.vls_coverage`
+  with uncertainty (researcher sourcing).
+- Any evidence for sex-asymmetric HIV transmission in Zambia to motivate
+  opening `hiv.beta_f2m` differentially.
+- Optional: pre-1990 UN WPP row to fix the dedup anchor contamination
+  (`base_year=1990` currently sits inside an active epidemic).
 
 **Superseded framings.**
 - **Multi-hop tracing (0 / 1 / 2 / 3 hops).** Original abstract framing. Dropped 2026-09-23 in favor of the minimum-meaningful-benefit narrative. The abstract PDF at `docs/Abstract_recency_NY1.docx` still carries the superseded framing and will need revision at manuscript stage.
