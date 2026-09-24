@@ -36,3 +36,9 @@ in this epoch.
   `rel_death` posterior near upper bound; `prop_m0` still pegs. Age × sex
   diagnostic reveals systematic female overshoot at 25-49 that's the
   likely driver of the residual aggregate misfit.
+- `03_prop_m0_bio_range/` — constrain `structuredsexual.prop_m0` to
+  biologically plausible [0.60, 0.80]. Forces the calibration to find
+  other transmission-cooling levers (or reveal that it cannot). Stress
+  test on the epoch: if the fit collapses meaningfully, that motivates
+  a next-epoch structural change (VL coverage uncertainty, differential
+  f2m transmission, etc.).
