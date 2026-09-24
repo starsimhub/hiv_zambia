@@ -70,7 +70,7 @@ def process_scens(sims=None):
     Process the scenarios
     """
     if sims is None:
-        sims = sc.loadobj('results/pn_scens.obj')
+        sims = sc.loadobj('raw_results/pn_scens.obj')
 
     # Make a DataFrame with the results
     sc.heading(f"Processing sims... ")
@@ -116,7 +116,7 @@ if __name__ == '__main__':
     if 'run_pn_scens' in to_run:
         # Run analyses
         sims = run_pn_scens(parallel=True, stop=2051)
-        sc.saveobj('results/pn_scens.obj', sims)  # Don't commit to repo
+        sc.saveobj('raw_results/pn_scens.obj', sims)  # gitignored (bulk)
 
     if 'process_scens' in to_run:
         # Process the scenarios

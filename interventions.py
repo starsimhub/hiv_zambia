@@ -187,7 +187,7 @@ def make_hiv_intvs(pn_pars=None):
     prep = sti.Prep(
         coverage=[0, 0.01, 0.5, 0.8],
         years=[2004, 2005, 2015, 2025],
-        eff_prep=0.8,
+        prep_eff=0.8,
     )
     interventions = [
         fsw_testing,

@@ -15,7 +15,7 @@ os.environ.update(
 import sciris as sc
 import stisim as sti
 import pandas as pd
-from hiv_model import make_sim, make_sim_pars
+from hiv_model import make_sim
 
 
 # Run settings
@@ -30,25 +30,24 @@ make_stats = True  # Whether to make stats
 
 def run_calibration(n_trials=None, n_workers=None, do_save=True):
 
-    # Define the calibration parameters
-    calib_pars = dict(
-        hiv_beta_m2f=dict(low=0.008, high=0.02, guess=0.012),
-        nw_prop_f0 = dict(low=0.55, high=0.9, guess=0.85),
-        nw_prop_m0 = dict(low=0.50, high=0.9, guess=0.81),
-        nw_f1_conc = dict(low=0.01, high=0.2, guess=0.01),
-        nw_m1_conc = dict(low=0.01, high=0.2, guess=0.01),
-        nw_p_pair_form = dict(low=0.4, high=0.9, guess=0.5),
-    )
+    # Define the calibration parameters (dot notation → sti.default_build_fn routing)
+    calib_pars = {
+        'hiv.beta_m2f':               dict(low=0.008, high=0.02, guess=0.012),
+        'structuredsexual.prop_f0':   dict(low=0.55, high=0.9, guess=0.85),
+        'structuredsexual.prop_m0':   dict(low=0.50, high=0.9, guess=0.81),
+        'structuredsexual.f1_conc':   dict(low=0.01, high=0.2, guess=0.01),
+        'structuredsexual.m1_conc':   dict(low=0.01, high=0.2, guess=0.01),
+        'structuredsexual.p_pair_form': dict(low=0.4, high=0.9, guess=0.5),
+    }
 
-    # Make the sim
-    sim = make_sim(verbose=-1)
+    # Make the sim (uninitialized so default_build_fn can apply pars before init)
+    sim = make_sim(verbose=-1, use_calib=False)
     data = pd.read_csv('data/zambia_hiv_calib.csv')
-    extra_results = ['hiv_n_diagnosed', 'hiv_n_on_art', 'n_alive']
+    extra_results = ['hiv.n_diagnosed', 'hiv.n_on_art', 'n_alive']
 
-    # Make the calibration
+    # Make the calibration (build_fn defaults to sti.default_build_fn)
     calib = sti.Calibration(
         calib_pars=calib_pars,
-        build_fn=make_sim_pars,
         sim=sim,
         extra_results=extra_results,
         data=data,
@@ -70,9 +69,9 @@ if __name__ == '__main__':
     print('Shrinking and saving...')
     if do_shrink:
         calib = calib.shrink(n_results=500)
-        sc.saveobj(f'results/zam_hiv_calib.obj', calib)
+        sc.saveobj(f'raw_results/zam_hiv_calib.obj', calib)
     else:
-        sc.saveobj(f'results/zam_hiv_calib.obj', calib)
+        sc.saveobj(f'raw_results/zam_hiv_calib.obj', calib)
 
     # Make stats
     if make_stats:
