@@ -10,12 +10,19 @@ Root-level Python for a small sprint-scale project.
 
 - `hiv_model.py` — model builder
 - `interventions.py` — HIV testing + ART + PrEP + single-hop `PartnerNotification` (recency test to be added)
-- `run_hiv_calibration.py` — Optuna calibration entry point
+- `run_hiv_calibration.py` — Optuna calibration entry point (single canonical driver; not duplicated per experiment)
 - `run_pn_scens.py` — scenario runner
 - `plot_*.py` — figure scripts
 - `utils.py` — helpers
 - `data/` — Zambia demography + national HIV surveillance
 - `docs/` — abstract, ZAMPHIA 2016 final report
+- `experiments/` — calibration provenance (see `experiments/README.md`).
+  Two-level: `NN_epoch/NN_experiment/` where an **epoch** is a structural
+  model change (new data preprocessing, new module, etc.) and an
+  **experiment** is a parameter change within an epoch. Each experiment
+  folder holds `SUMMARY.md` (commit hash + calib_pars + fit table + notes)
+  and `figures/` copies. Raw outputs (`raw_results/*.obj`) stay gitignored;
+  recoverability contract is commit hash + calib_pars.
 
 Results go to `results/` (gitignored bulk; committable summaries only).
 

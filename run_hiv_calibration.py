@@ -1,7 +1,12 @@
 """
-Run calibration for the HIV model
-""" 
- 
+Shared calibration driver for the HIV model.
+
+Library used by per-experiment `run.py` scripts under `experiments/`.
+Each experiment's `run.py` defines its own `calib_pars` dict and calls
+`run_and_save(calib_pars=...)`. This file holds the machinery that
+doesn't vary between experiments in the same epoch.
+"""
+
 # Additions to handle numpy multithreading
 import os
 os.environ.update(
@@ -11,76 +16,48 @@ os.environ.update(
     MKL_NUM_THREADS='1',
 )
 
-# %% Imports and settings
+import pandas as pd
 import sciris as sc
 import stisim as sti
-import pandas as pd
+
 from hiv_model import make_sim
+from utils import percentiles
 
 
-# Run settings
-debug = False  # If True, this will do smaller runs that can be run locally for debugging
-n_trials = [1000, 2][debug]  # How many trials to run for calibration
-n_workers = [50, 1][debug]    # How many cores to use
-# storage = ["mysql://hpvsim_user@localhost/hpvsim_db", None][debug]  # Storage for calibrations
-storage = None
-do_shrink = True  # Whether to shrink the calibration results
-make_stats = True  # Whether to make stats
-
-
-def run_calibration(n_trials=None, n_workers=None, do_save=True):
-
-    # Define the calibration parameters (dot notation → sti.default_build_fn routing)
-    calib_pars = {
-        'hiv.beta_m2f':               dict(low=0.008, high=0.02, guess=0.012),
-        'structuredsexual.prop_f0':   dict(low=0.55, high=0.9, guess=0.85),
-        'structuredsexual.prop_m0':   dict(low=0.50, high=0.9, guess=0.81),
-        'structuredsexual.f1_conc':   dict(low=0.01, high=0.2, guess=0.01),
-        'structuredsexual.m1_conc':   dict(low=0.01, high=0.2, guess=0.01),
-        'structuredsexual.p_pair_form': dict(low=0.4, high=0.9, guess=0.5),
-    }
-
-    # Make the sim (uninitialized so default_build_fn can apply pars before init)
+def run_and_save(calib_pars, n_trials=1000, n_workers=50, shrink_to=500,
+                 raw_path='raw_results/zam_hiv_calib.obj',
+                 stats_path='results/zam_hiv_calib_stats.df',
+                 par_stats_path='results/zam_hiv_par_stats.df'):
+    """Run Optuna calibration for a given calib_pars dict; save results + stats."""
     sim = make_sim(verbose=-1, use_calib=False)
     data = pd.read_csv('data/zambia_hiv_calib.csv')
     extra_results = ['hiv.n_diagnosed', 'hiv.n_on_art', 'n_alive']
 
-    # Make the calibration (build_fn defaults to sti.default_build_fn)
+    # Age x sex prevalence for ZAMPHIA 2016 comparison (diagnostic only)
+    age_bins = [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 100]
+    for sex in ('f', 'm'):
+        for ab1, ab2 in zip(age_bins[:-1], age_bins[1:]):
+            extra_results.append(f'hiv.prevalence_{sex}_{ab1}_{ab2}')
+
     calib = sti.Calibration(
         calib_pars=calib_pars,
         sim=sim,
         extra_results=extra_results,
         data=data,
         total_trials=n_trials, n_workers=n_workers,
-        die=True, reseed=False, storage=storage, save_results=True,
+        die=True, reseed=False, storage=None, save_results=True,
     )
-
     calib.calibrate(load=True)
-
-    return sim, calib
-
-
-if __name__ == '__main__':
-
-    sim, calib = run_calibration(n_trials=n_trials, n_workers=n_workers)
     print(f'Best pars are {calib.best_pars}')
 
-    # Save the results
     print('Shrinking and saving...')
-    if do_shrink:
-        calib = calib.shrink(n_results=500)
-        sc.saveobj(f'raw_results/zam_hiv_calib.obj', calib)
-    else:
-        sc.saveobj(f'raw_results/zam_hiv_calib.obj', calib)
+    calib = calib.shrink(n_results=shrink_to)
+    sc.saveobj(raw_path, calib)
 
-    # Make stats
-    if make_stats:
-        print('Making stats...')
-        from utils import percentiles
-        df = calib.resdf
-        df_stats = df.groupby(df.time).describe(percentiles=percentiles)
-        sc.saveobj(f'results/zam_hiv_calib_stats.df', df_stats)
-        par_stats = calib.df.describe(percentiles=[0.05, 0.95])
-        sc.saveobj(f'results/zam_hiv_par_stats.df', par_stats)
+    print('Making stats...')
+    df_stats = calib.resdf.groupby(calib.resdf.time).describe(percentiles=percentiles)
+    sc.saveobj(stats_path, df_stats)
+    par_stats = calib.df.describe(percentiles=[0.05, 0.95])
+    sc.saveobj(par_stats_path, par_stats)
 
-    print('Done!')
+    return sim, calib

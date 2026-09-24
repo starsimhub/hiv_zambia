@@ -108,7 +108,7 @@ Don't explain STIsim internals; surface only consequential design decisions; mak
 **Memory strategy** *(Decided)*.
 - Curated project memory: `CLAUDE.md` (project instructions) + `ANALYSIS_PLAN.md` (this file, living) in the repo, version-controlled.
 - Agent memory: `/home/robyn/.claude/projects/-home-robyn-hiv-zambia/memory/` for user preferences and cross-session recall.
-- No `experiments/` scaffolding at this stage — the calib-plugin introduces that on its own workflow if warranted.
+- Calibration provenance: `experiments/` (introduced 2026-09-24 when the first return-loop iteration was scoped). Two-level epoch/experiment scheme documented in `experiments/README.md`.
 
 **Repository / git strategy** *(Decided for this week)*.
 Work on `main` directly. Commit frequently. Feature branch + PR workflow revisited if co-authors start touching code.
@@ -130,20 +130,12 @@ Work on `main` directly. Commit frequently. Feature branch + PR workflow revisit
 - Deaths file passed through `stisim.data.dedup_deaths(base_year=1990, end_year=2030)`. Raw preserved as `data/zambia_deaths_all_cause.csv`. Peak AIDS-share landed at 59 % vs the expected 70-85 %; the 1990 anchor is contaminated (Zambia HIV prev already ~9 % by 1990) and the anchor should be replaced with a pre-1990 UN WPP row when convenient.
 - Output structure: `raw_results/` gitignored for bulk `.obj` files (~1.5 MB each); `results/` tracked for minimal `.df` summary tables needed by co-authors to replicate figures.
 
-## Calibration state (post-dedup, 2026-09-23)
+## Calibration state
 
-500-draw ensemble under `raw_results/zam_hiv_calib.obj`. Sustainability: 0/500 extinct at 2030. Fit is not yet acceptable — see [figures/calibration_fit_post_dedup_2026-09-23.png](figures/calibration_fit_post_dedup_2026-09-23.png).
-
-| Metric (2023) | Data | Sim median | 5-95 % |
-|---|---|---|---|
-| Population | 20.3 M | 20.6 M | 20.2 – 20.9 M ✓ |
-| PLHIV | 1.30 M | 1.83 M | 1.29 – 2.73 M (overshoots) |
-| New infections/yr | 23 k | 81 k | 33 – 148 k (3× too high) |
-| HIV deaths/yr | 17 k | 6.8 k | 2 – 15 k (2× too low) |
-| On ART | 1.27 M | 1.27 M | 1.12 – 1.27 M ✓ |
-| Prev 15-49 | 9.8 % | 14.5 % | 9.4 – 21.8 % (overshoots) |
-
-`structuredsexual.prop_m0` hit its upper prior bound (0.9) in 342/500 top draws — the calibration wants more low-risk-fraction males to bring transmission down and the prior is blocking it. Follow-ups queued in SESSION_LOG.md.
+Per-experiment fits live in `experiments/NN_epoch/NN_experiment/SUMMARY.md`.
+Current epoch: `experiments/01_post_dedup/`. Latest completed experiment:
+`01_baseline_2026-09-23` (fit not acceptable). In flight:
+`02_open_rel_death_widen_prop_m0`.
 
 **Superseded framings.**
 - **Multi-hop tracing (0 / 1 / 2 / 3 hops).** Original abstract framing. Dropped 2026-09-23 in favor of the minimum-meaningful-benefit narrative. The abstract PDF at `docs/Abstract_recency_NY1.docx` still carries the superseded framing and will need revision at manuscript stage.
