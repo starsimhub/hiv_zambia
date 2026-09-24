@@ -1,6 +1,7 @@
 # Experiment 01 — baseline (2026-09-23)
 
-**Commit:** `625cd89` (project scaffolding + calibration modernization + first fit iteration)
+**Commit (of the calibration itself):** `625cd89` (project scaffolding + calibration modernization + first fit iteration).
+**Commit (of this retrospective run.py + SUMMARY):** `5682f3f`.
 **Date run:** 2026-09-23
 **Trials / workers:** 1000 / 50
 **Ensemble size after shrink:** 500 draws
