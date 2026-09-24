@@ -31,9 +31,9 @@
 | structuredsexual.m1_conc | 0.099 | 0.017 | 0.193 |
 | structuredsexual.p_pair_form | 0.489 | 0.419 | 0.569 |
 
-## Fit at 2023
+## Fit at 2023 (median, 10–90%)
 
-| Metric | Data | Sim median | 5–95% |
+| Metric | Data | Sim median | 10–90% |
 |---|---|---|---|
 | Population | 20.3 M | 20.6 M | 20.2 – 20.9 M ✓ |
 | PLHIV | 1.30 M | 1.83 M | 1.29 – 2.73 M (overshoots) |

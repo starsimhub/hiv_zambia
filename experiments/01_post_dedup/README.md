@@ -30,5 +30,9 @@ in this epoch.
 
 - `01_baseline_2026-09-23/` — 6-parameter baseline. First end-to-end
   Optuna run of the epoch. Fit not acceptable.
-- `02_open_rel_death_widen_prop_m0/` — adds `hiv.rel_death` and widens
-  `structuredsexual.prop_m0` upper bound to 0.98.
+- `02_open_rel_death_widen_prop_m0/` (2026-09-24) — adds `hiv.rel_death`
+  and widens `structuredsexual.prop_m0` to 0.98. Partial improvement
+  (PLHIV/prev overshoot came down); HIV deaths unchanged despite
+  `rel_death` posterior near upper bound; `prop_m0` still pegs. Age × sex
+  diagnostic reveals systematic female overshoot at 25-49 that's the
+  likely driver of the residual aggregate misfit.
