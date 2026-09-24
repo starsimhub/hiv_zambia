@@ -5,7 +5,6 @@ Create interventions
 # %% Imports and settings
 import numpy as np
 import starsim as ss
-import pandas as pd
 import stisim as sti
 import sciris as sc
 
@@ -177,12 +176,12 @@ class PartnerNotification(ss.Intervention):
 
 def make_hiv_intvs(pn_pars=None):
 
-    n_art = pd.read_csv(f'data/n_art.csv').set_index('year')
-    n_art['p_art'] = np.nan
-    n_art.loc[2024:, 'p_art'] = 0.97  # Switch to proportion target after historical data ends
+    from art_data import build_art_coverage, build_vls_coverage
+    art_coverage = build_art_coverage(sim_start=1985, sim_end=2030, p_art_projected=0.95)
+    art_vls = build_vls_coverage()
     # n_vmmc = pd.read_csv(f'data/n_vmmc.csv').set_index('year')
     fsw_testing, other_testing, low_cd4_testing, partner_testing, anc_testing = get_testing_products()
-    art = sti.ART(coverage=n_art)
+    art = sti.ART(coverage=art_coverage, vls_coverage=art_vls)
     # vmmc = sti.VMMC(coverage=n_vmmc)
     prep = sti.Prep(
         coverage=[0, 0.01, 0.5, 0.8],
