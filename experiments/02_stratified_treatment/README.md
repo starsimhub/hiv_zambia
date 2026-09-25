@@ -55,7 +55,14 @@ cascade, one on condom use:
 
 ## Experiments
 
-- `01_baseline/` — exp 03's calib_pars re-run on the new structural setup.
-  Direct test of whether the treatment-cascade rework improves the
-  female mid-life prevalence overshoot and/or the HIV death undershoot
-  without touching priors.
+- `01_baseline/` — epoch 01 exp 03's calib_pars (with `hiv.beta_m2f`
+  upper widened 10×) re-run on the new structural setup. First
+  experiment on data to hit HIV deaths (19 k median vs 17 k data);
+  PLHIV/prev overshot because the widened beta let Optuna find hot
+  regimes. `prop_m0` still pegs; female mid-life overshoot persists.
+- `02_refreshed_calib_data/` — same 7-par `calib_pars` as 02.01, but
+  `data/zambia_hiv_calib.csv` was refreshed on origin between the two
+  runs (previous targets had a problem, per researcher). Also adds
+  age × sex incidence + PLHIV extras so the ZAMPHIA incidence plot's
+  model overlay populates. Direct comparability with 02.01 on the fit
+  table is limited.
