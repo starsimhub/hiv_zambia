@@ -33,11 +33,13 @@ def run_and_save(calib_pars, n_trials=1000, n_workers=50, shrink_to=500,
     data = pd.read_csv('data/zambia_hiv_calib.csv')
     extra_results = ['hiv.n_diagnosed', 'hiv.n_on_art', 'n_alive']
 
-    # Age x sex prevalence for ZAMPHIA 2016 comparison (diagnostic only)
+    # Age x sex prevalence + counts for ZAMPHIA 2016 comparison (diagnostic only)
     age_bins = [15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 100]
     for sex in ('f', 'm'):
         for ab1, ab2 in zip(age_bins[:-1], age_bins[1:]):
             extra_results.append(f'hiv.prevalence_{sex}_{ab1}_{ab2}')
+            extra_results.append(f'hiv.new_infections_{sex}_{ab1}_{ab2}')
+            extra_results.append(f'hiv.n_infected_{sex}_{ab1}_{ab2}')
 
     calib = sti.Calibration(
         calib_pars=calib_pars,

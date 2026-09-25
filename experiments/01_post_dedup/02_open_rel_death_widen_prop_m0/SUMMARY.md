@@ -1,7 +1,7 @@
 # Experiment 02 — open `hiv.rel_death`, widen `prop_m0` upper bound
 
 **Date run:** 2026-09-24.
-**Commit:** `3d4807f` (this experiment's `run.py` + scaffold).
+**Commit:** `6abbf75` (this experiment's `run.py` + scaffold).
 **Trials / workers:** 1000 / 50. **Ensemble size after shrink:** 500 draws.
 **Sustainability:** 0/500 extinct at 2030 (min prev 15-49 = 5.1% at 2030).
 **Mismatch:** min=23.83, mean=28.36, max=30.47.

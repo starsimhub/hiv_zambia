@@ -1,7 +1,7 @@
 # Experiment 02.01 — epoch 02 baseline: exp 03 pars + widened beta on stratified-treatment setup
 
 **Date run:** 2026-09-24.
-**Commit:** `e51003c`.
+**Commit:** `334d8e0`.
 **Trials / workers:** 1000 / 50. **Ensemble size after shrink:** 500 draws.
 **Sustainability:** 0/500 extinct at 2030 (min prev 15-49 = 3.5% at 2030).
 **Mismatch:** min=22.62, mean=29.19, max=33.76.
