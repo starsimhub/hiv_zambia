@@ -94,4 +94,10 @@ cascade, one on condom use:
   time: ~50% VLS in 2000, ~85% in 2010, ZAMPHIA-measured 77-92% in
   2016, 79-94% in 2020, 82-95% in 2025). Also widens `hiv.eff_condom`
   upper 0.9 → 0.95. Same 13 pars as 02.06. Motivation: 2020-2025
-  infection curve too flat in 02.06.
+  infection curve too flat in 02.06. Result: eff_condom relaxed off
+  upper (0.83), but 2020-2025 cooling didn't materialise (VLS swing
+  too gentle).
+- `08_bigger_vls_condom_patterns/` — bigger VLS trajectory swing
+  (~35% → ~95% across 2000-2025), extends condom_use.csv to 2025,
+  raises (0,0) stable-stable floor + cross-risk partnership levels.
+  Same 13 pars as 02.07. Direct attempt at 2020-2025 cooling.
