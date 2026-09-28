@@ -81,6 +81,47 @@ def _model_prev_boxes(row, sex, mult=100.0):
     return stats
 
 
+def _model_art_boxes(row, sex, mult=100.0):
+    """% on ART per 5-year band from the stratified analyzer counts."""
+    percentiles = ('10%', '25%', '50%', '75%', '90%')
+    box_keys = ('whislo', 'q1', 'med', 'q3', 'whishi')
+    stats = []
+    for ab1, ab2 in PREV_BANDS:
+        vals = {}
+        for pct in percentiles:
+            inf_col = (f'hivartvlsstrat.n_infected_{sex}_{ab1}_{ab2}', pct)
+            art_col = (f'hivartvlsstrat.n_on_art_{sex}_{ab1}_{ab2}', pct)
+            if inf_col not in row.index or art_col not in row.index:
+                return None
+            n_inf = row[inf_col]
+            n_art = row[art_col]
+            vals[pct] = (n_art / max(n_inf, 1.0)) * mult
+        stats.append({box_keys[i]: vals[p] for i, p in enumerate(percentiles)} | {'fliers': []})
+    return stats
+
+
+def _model_vls_boxes(row, sex, mult=100.0):
+    """% VLS (conditional on ART) per 3-band from stratified counts."""
+    percentiles = ('10%', '25%', '50%', '75%', '90%')
+    box_keys = ('whislo', 'q1', 'med', 'q3', 'whishi')
+    stats = []
+    for coarse in INC_BANDS:
+        vals = {}
+        for pct in percentiles:
+            n_art = 0.0
+            n_vls = 0.0
+            for ab1, ab2 in INC_MODEL_BINS[coarse]:
+                art_col = (f'hivartvlsstrat.n_on_art_{sex}_{ab1}_{ab2}', pct)
+                vls_col = (f'hivartvlsstrat.n_vls_{sex}_{ab1}_{ab2}', pct)
+                if art_col not in row.index or vls_col not in row.index:
+                    return None
+                n_art += row[art_col]
+                n_vls += row[vls_col]
+            vals[pct] = (n_vls / max(n_art, 1.0)) * mult
+        stats.append({box_keys[i]: vals[p] for i, p in enumerate(percentiles)} | {'fliers': []})
+    return stats
+
+
 def _model_incidence_boxes(row, sex):
     """Aggregate 5-year new_infections + n_infected across the 3 ZAMPHIA bands.
 
@@ -196,25 +237,26 @@ def plot(zamphia_prev, zamphia_inc, zamphia_art, zamphia_vls, df_stats,
     ax.set_xticks(np.arange(n)); ax.set_xticklabels(inc_labels)
     ax.set_title('Annual HIV incidence'); ax.set_ylabel('Annual incidence (%)'); ax.set_ylim(bottom=0)
 
-    # --- Panel 3: ART coverage, 5-year bands (data only) ---
+    # --- Panel 3: ART coverage, 5-year bands ---
     ax = axes[1, 0]
-    art_labels = prev_labels
     art_bands = [f'{a}-{b-1}' for a, b in PREV_BANDS]
     n = len(art_bands)
     art_idx = zamphia_art.set_index(['sex', 'AgeBin'])['pct_art']
-    for sex, offset in [('f', -0.15), ('m', 0.15)]:
+    for sex, offset in [('f', -0.2), ('m', 0.2)]:
         color = SEX_COLOR[sex]
         pos = _positions(n, offset)
+        stats = _model_art_boxes(row, sex)
+        if stats is not None:
+            _bxp(ax, stats, pos, color)
         vals = [art_idx.get((sex, ab), np.nan) for ab in art_bands]
         mask = ~np.isnan(vals)
         ax.scatter(np.array(pos)[mask], np.array(vals)[mask], color=color, s=60,
-                   edgecolor='k', label=f'{SEX_LABEL[sex]} (ZAMPHIA)')
-    ax.set_xticks(np.arange(n)); ax.set_xticklabels(art_labels, rotation=45, ha='right')
+                   edgecolor='k', zorder=5)
+    ax.set_xticks(np.arange(n)); ax.set_xticklabels(art_bands, rotation=45, ha='right')
     ax.set_title('ART coverage (% of PLHIV on ART)')
     ax.set_ylabel('% on ART'); ax.set_ylim(0, 100); ax.set_xlabel('Age band')
-    ax.legend(frameon=False, loc='lower right')
 
-    # --- Panel 4: viral load suppression conditional on ART, 3 bands (data only) ---
+    # --- Panel 4: viral load suppression conditional on ART, 3 bands ---
     ax = axes[1, 1]
     vls_bands = [f'{a}-{b-1}' for a, b in INC_BANDS]
     n = len(vls_bands)
@@ -222,9 +264,13 @@ def plot(zamphia_prev, zamphia_inc, zamphia_art, zamphia_vls, df_stats,
     for sex, offset in [('f', -0.15), ('m', 0.15)]:
         color = SEX_COLOR[sex]
         pos = _positions(n, offset)
+        stats = _model_vls_boxes(row, sex)
+        if stats is not None:
+            _bxp(ax, stats, pos, color)
         vals = [vls_idx.get((sex, ab), np.nan) * 100 for ab in vls_bands]
         mask = ~np.isnan(vals)
-        ax.scatter(np.array(pos)[mask], np.array(vals)[mask], color=color, s=60, edgecolor='k')
+        ax.scatter(np.array(pos)[mask], np.array(vals)[mask], color=color, s=60,
+                   edgecolor='k', zorder=5)
     ax.set_xticks(np.arange(n)); ax.set_xticklabels(vls_bands)
     ax.set_title('Viral load suppression (% of ART users VLS)')
     ax.set_ylabel('% VLS'); ax.set_ylim(0, 100); ax.set_xlabel('Age band')

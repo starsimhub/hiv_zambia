@@ -65,4 +65,9 @@ cascade, one on condom use:
   runs (previous targets had a problem, per researcher). Also adds
   age × sex incidence + PLHIV extras so the ZAMPHIA incidence plot's
   model overlay populates. Direct comparability with 02.01 on the fit
-  table is limited.
+  table is limited. Uniform ~3-4× incidence overshoot across all
+  strata identified.
+- `03_stratified_art_vls_analyzer/` — same `calib_pars` as 02.02; adds
+  a downstream `HIVArtVlsStrat` analyzer so the ZAMPHIA age × sex ART
+  coverage and VLS panels get model overlays. Analyzer is
+  diagnostic-only; doesn't affect fit dynamics.

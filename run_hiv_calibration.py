@@ -40,6 +40,10 @@ def run_and_save(calib_pars, n_trials=1000, n_workers=50, shrink_to=500,
             extra_results.append(f'hiv.prevalence_{sex}_{ab1}_{ab2}')
             extra_results.append(f'hiv.new_infections_{sex}_{ab1}_{ab2}')
             extra_results.append(f'hiv.n_infected_{sex}_{ab1}_{ab2}')
+            # ART coverage + VLS stratified counts from the HIVArtVlsStrat analyzer
+            extra_results.append(f'hivartvlsstrat.n_infected_{sex}_{ab1}_{ab2}')
+            extra_results.append(f'hivartvlsstrat.n_on_art_{sex}_{ab1}_{ab2}')
+            extra_results.append(f'hivartvlsstrat.n_vls_{sex}_{ab1}_{ab2}')
 
     calib = sti.Calibration(
         calib_pars=calib_pars,

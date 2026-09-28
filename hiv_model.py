@@ -33,9 +33,11 @@ def make_sim(seed=1, stop=2030, verbose=1/12, analyzers=None, use_calib=True, pn
 
     intvs = make_hiv_intvs(pn_pars=pn_pars)
 
-    # Add network analyzers
+    # Add analyzers
+    from analyzers import HIVArtVlsStrat
     analyzers = sc.autolist(analyzers)
     analyzers += sti.sw_stats(diseases=['hiv'])
+    analyzers += HIVArtVlsStrat()
     if analyze_network:
         analyzers += sti.NetworkDegree(relationship_types=['partners', 'stable', 'casual'])
         analyzers += sti.RelationshipDurations()
