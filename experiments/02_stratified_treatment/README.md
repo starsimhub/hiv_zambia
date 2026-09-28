@@ -87,4 +87,11 @@ cascade, one on condom use:
   `structuredsexual.rel_condom_use` (stisim 1.7.1 rc1.7.1 branch). The
   condom coverage lever, orthogonal to `eff_condom` efficacy. Bumps
   stisim off ai-structure `1.7.0` to a local `rc1.7.1` branch with a
-  3-line change; not pushed.
+  3-line change; not pushed. Best mismatch 10.8; ensemble mean
+  mismatch dropped 28% from 02.05.
+- `07_time_varying_vls/` — extends `hiv_vls_conditional_over_time.csv`
+  from 2016-only to a 2000-2025 trajectory (ART efficacy grows with
+  time: ~50% VLS in 2000, ~85% in 2010, ZAMPHIA-measured 77-92% in
+  2016, 79-94% in 2020, 82-95% in 2025). Also widens `hiv.eff_condom`
+  upper 0.9 → 0.95. Same 13 pars as 02.06. Motivation: 2020-2025
+  infection curve too flat in 02.06.

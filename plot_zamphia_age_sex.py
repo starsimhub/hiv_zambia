@@ -8,7 +8,7 @@ Reads:
   data/zamphia_2016_hiv_by_age_sex.csv (prev, 5-year bands)
   data/hiv_incidence_zamphia_2016.csv (incidence, 3 bands)
   data/hiv_treatment_status_{females,males}_age_rows.csv (ART coverage, 5-year bands)
-  data/hiv_vls_conditional_zamphia_2016.csv (VLS, 3 bands)
+  data/hiv_vls_conditional_over_time.csv (VLS, 3 bands x time)
   results/zam_hiv_calib_stats.df (model ensemble)
 Writes:
   figures/zamphia_hiv_age_sex.png
@@ -293,7 +293,8 @@ if __name__ == '__main__':
     zamphia_prev = zamphia_prev[zamphia_prev.sex.isin(['f', 'm'])].copy()
     zamphia_inc = pd.read_csv('data/hiv_incidence_zamphia_2016.csv')
     zamphia_art = _load_zamphia_art_stratified()
-    zamphia_vls = pd.read_csv('data/hiv_vls_conditional_zamphia_2016.csv')
+    zamphia_vls = pd.read_csv('data/hiv_vls_conditional_over_time.csv')
+    zamphia_vls = zamphia_vls[zamphia_vls.Year == ZAMPHIA_YEAR].copy()
     df_stats = sc.loadobj('results/zam_hiv_calib_stats.df')
     plot(zamphia_prev, zamphia_inc, zamphia_art, zamphia_vls, df_stats)
     print('Done.')

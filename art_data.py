@@ -8,7 +8,7 @@ Combines:
   (data/hiv_treatment_status_females_age_rows.csv,
   data/hiv_treatment_status_males_age_rows.csv)
 - ZAMPHIA 2016 VLS conditional on ART by 3-band x sex
-  (data/hiv_vls_conditional_zamphia_2016.csv)
+  (data/hiv_vls_conditional_over_time.csv)
 
 Method (ART coverage): aggregate proportion `p_art_agg(year) = n_art / PLHIV`
 scaled by stratum-specific ratio `pct_art_stratum / pct_art_zamphia_aggregate`.
@@ -71,4 +71,4 @@ def build_art_coverage(sim_start=1985, sim_end=2030, p_art_projected=0.95):
 
 def build_vls_coverage():
     """Stratified VLS (conditional on ART) DataFrame for sti.ART(vls_coverage=...)."""
-    return pd.read_csv('data/hiv_vls_conditional_zamphia_2016.csv')
+    return pd.read_csv('data/hiv_vls_conditional_over_time.csv')
