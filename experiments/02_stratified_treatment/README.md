@@ -1,6 +1,10 @@
 # Epoch 02 — stratified ART & VLS, projected as proportion
 
-**Status:** open (2026-09-24).
+**Status:** closed (2026-09-28). Best mismatch 10.7 (02.07); 2020-2025
+FOI cooling landed in 02.08 (35 k @ 2023 vs data 26 k) after bigger
+VLS swing + condom-pattern refresh. Residual prev overshoot (12.1% vs
+8.9%) + `rel_condom_use` still pinning upper are network-composition
+problems, deferred to epoch 03.
 
 ## What's distinct from epoch 01
 
@@ -100,4 +104,7 @@ cascade, one on condom use:
 - `08_bigger_vls_condom_patterns/` — bigger VLS trajectory swing
   (~35% → ~95% across 2000-2025), extends condom_use.csv to 2025,
   raises (0,0) stable-stable floor + cross-risk partnership levels.
-  Same 13 pars as 02.07. Direct attempt at 2020-2025 cooling.
+  Same 13 pars as 02.07. 2020-2025 cooling landed: 2023 new
+  infections 55 k → 35 k (data 26 k). Best mismatch 11.4 (aggregate
+  slightly worse than 02.07 because prev residual dominates the
+  scalar). Epoch 02 closes here.
