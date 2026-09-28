@@ -80,4 +80,11 @@ cascade, one on condom use:
   `beta_m2f` finally climbed out of old prior at 0.024.
 - `05_corrected_prev_rerun/` — same 12 pars as 02.04; re-run against
   the corrected `hiv.prevalence_15_49` UNAIDS series (peak higher
-  mid-1990s / mid-2000s, endpoints lower, commit `fdfa4e8`).
+  mid-1990s / mid-2000s, endpoints lower, commit `fdfa4e8`). Same
+  mismatch as 02.04 (~12.6); posterior found different network corner
+  (multi-modal). `eff_condom` posterior mean pushed to 0.88.
+- `06_add_rel_condom_use/` — 13 pars including new
+  `structuredsexual.rel_condom_use` (stisim 1.7.1 rc1.7.1 branch). The
+  condom coverage lever, orthogonal to `eff_condom` efficacy. Bumps
+  stisim off ai-structure `1.7.0` to a local `rc1.7.1` branch with a
+  3-line change; not pushed.
