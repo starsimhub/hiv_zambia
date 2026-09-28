@@ -70,4 +70,10 @@ cascade, one on condom use:
 - `03_stratified_art_vls_analyzer/` — same `calib_pars` as 02.02; adds
   a downstream `HIVArtVlsStrat` analyzer so the ZAMPHIA age × sex ART
   coverage and VLS panels get model overlays. Analyzer is
-  diagnostic-only; doesn't affect fit dynamics.
+  diagnostic-only; doesn't affect fit dynamics. VLS matches ZAMPHIA
+  cleanly; young-male ART coverage undershoots (diagnosis-limited).
+- `04_open_foi_levers/` — opens five new levers to attack the uniform
+  ~3-4× FOI overshoot: high-risk fractions (`prop_f2`, `prop_m2`),
+  high-risk concurrency (`f2_conc`, `m2_conc`), and HIV condom
+  effectiveness (`hiv.eff_condom` 0.5 → up to 0.9, biology says 0.7-0.85).
+  12 pars total.
