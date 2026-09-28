@@ -76,4 +76,8 @@ cascade, one on condom use:
   ~3-4× FOI overshoot: high-risk fractions (`prop_f2`, `prop_m2`),
   high-risk concurrency (`f2_conc`, `m2_conc`), and HIV condom
   effectiveness (`hiv.eff_condom` 0.5 → up to 0.9, biology says 0.7-0.85).
-  12 pars total.
+  12 pars total. Mismatch halved; `eff_condom` pinned upper at 0.85;
+  `beta_m2f` finally climbed out of old prior at 0.024.
+- `05_corrected_prev_rerun/` — same 12 pars as 02.04; re-run against
+  the corrected `hiv.prevalence_15_49` UNAIDS series (peak higher
+  mid-1990s / mid-2000s, endpoints lower, commit `fdfa4e8`).
