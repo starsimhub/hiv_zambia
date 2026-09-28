@@ -3,7 +3,7 @@ Build age/sex-stratified ART coverage + VLS DataFrames for sti.ART().
 
 Combines:
 - Aggregate ART count time series (data/n_art.csv)
-- Aggregate PLHIV time series (data/zambia_hiv_data.csv, hiv_n_infected column)
+- Aggregate PLHIV time series (data/zambia_hiv_calib.csv, hiv.n_infected column)
 - ZAMPHIA 2016 %ART by 5-year age band x sex
   (data/hiv_treatment_status_females_age_rows.csv,
   data/hiv_treatment_status_males_age_rows.csv)
@@ -44,7 +44,7 @@ def build_art_coverage(sim_start=1985, sim_end=2030, p_art_projected=0.95):
     strat = _load_pct_art_by_stratum()
 
     n_art = pd.read_csv('data/n_art.csv').set_index('year')['n_art']
-    plhiv = pd.read_csv('data/zambia_hiv_data.csv').set_index('year')['hiv_n_infected']
+    plhiv = pd.read_csv('data/zambia_hiv_calib.csv').set_index('time')['hiv.n_infected']
     yrs = sorted(set(n_art.index) & set(plhiv.index))
     agg_p_art = pd.Series({y: (n_art[y] / plhiv[y]) if plhiv[y] > 0 else 0.0 for y in yrs})
 
