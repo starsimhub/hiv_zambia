@@ -28,7 +28,7 @@ Results go to `results/` (gitignored bulk; committable summaries only).
 
 ## State of play
 
-**Phase 1 (in progress).** Calibration modernization on current stisim (1.7.0 / starsim 3.6.1). Completed: `sti.Prep` kwarg fix (`eff_prep` → `prep_eff`); calibration data columns migrated to dot notation (`hiv.prevalence_15_49` etc.); custom `make_sim_pars` deleted in favor of stisim's `default_build_fn` with dot-notation calib-par routing (`hiv.beta_m2f`, `structuredsexual.prop_f0`, …); `sti.HIV` configured with ZAMPHIA-aligned 5-year `age_bins`; ZAMPHIA 2016 age×sex prevalence extracted to `data/zamphia_2016_hiv_by_age_sex.csv` (held out as validation, not a calibration target). The `run_hiv_calibration.py` script runs 1000 Optuna TPE trials and shrinks to the top 500 draws.
+**Phase 1 (done, 2026-09-28).** Calibration baseline: `experiments/02_stratified_treatment/08_bigger_vls_condom_patterns/`. 13-par Optuna posterior on stisim `rc1.7.1` (local branch adding `structuredsexual.rel_condom_use`), 1000 trials shrunk to top 500 by mismatch; top-100 committed as `outputs/draws_used.csv` for downstream consumption (best mismatch 11.4, mean 12.9). Fits: PLHIV 1.53 M (data 1.30 M), new infections 2023 35 k (data 26 k), deaths 18 k (data 18 k), prev 15-49 12.1% (data 8.9%). Residuals — prev overshoot ~3pp, `rel_condom_use` still pins upper — are network-composition problems deferred to a future epoch. Full epoch history in `experiments/02_stratified_treatment/README.md`.
 
 **Phase 2.** Add `RecencyTest` intervention: 100% uptake among just-diagnosed, sensitivity 25% on infections < 1 year, specificity 96%. Extend `PartnerNotification` with a triggering-source variant (all-new-diagnoses vs recency-flagged-only).
 
