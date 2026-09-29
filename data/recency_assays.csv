@@ -1,0 +1,11 @@
+label,assay,manufacturer,read_method,mdri_days,mdri_lo,mdri_hi,frr,sens_reported,frr_treated,source,doi
+asante_cephia_visual,Asante HIV-1 Rapid Recency Assay,Sedia Biosciences,visual,105,86,125,0.016,,0.535,CEPHIA evaluation report 2019,10.5281/zenodo.3509834
+asante_cephia_reader,Asante HIV-1 Rapid Recency Assay,Sedia Biosciences,electronic reader,197,171,224,0.036,,0.581,CEPHIA evaluation report 2019,10.5281/zenodo.3509834
+asante_cdc_linear,Asante HIV-1 Rapid Recency Assay,Sedia Biosciences,reader (linear interpolation),160,140,181,0.021,,,Tan et al. AIDS Res Hum Retroviruses 2025,10.1089/aid.2024.0102
+asante_cdc_poly,Asante HIV-1 Rapid Recency Assay,Sedia Biosciences,reader (polynomial regression),167,147,187,0.030,,,Tan et al. AIDS Res Hum Retroviruses 2025,10.1089/aid.2024.0102
+asante_uganda_lab1,Asante HIV-1 Rapid Recency Assay,Sedia Biosciences,visual (field lab 1),,,,0.005,0.32,,Galiwango et al. AIDS Res Hum Retroviruses 2021,10.1089/aid.2020.0279
+asante_uganda_lab2,Asante HIV-1 Rapid Recency Assay,Sedia Biosciences,visual (field lab 2),,,,0.005,0.49,,Galiwango et al. AIDS Res Hum Retroviruses 2021,10.1089/aid.2020.0279
+sedia_lag_odn1,LAg-Avidity EIA (ODn 1.0),Sedia Biosciences,laboratory EIA,141,119,160,0.002,,,Duong et al. PLoS One 2012,10.1371/journal.pone.0033328
+maxim_lag,LAg-EIA,Maxim Biomedical,laboratory EIA,152,137,172,0.059,,,Liu et al. J Clin Microbiol 2025,10.1128/jcm.01208-25
+kinghawk_lag,LAg-EIA,KingHawk,laboratory EIA,131,107,140,0.027,,,Liu et al. J Clin Microbiol 2025,10.1128/jcm.01208-25
+china_cdc_rapid,Rapid LAg test (developmental),China CDC,visual,123,87,138,0.053,,0.699,Liu et al. J Clin Microbiol 2025,10.1128/jcm.01208-25

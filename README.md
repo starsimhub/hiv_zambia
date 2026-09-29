@@ -18,6 +18,7 @@ Agent-based model of HIV transmission in Zambia, built on [STIsim](https://githu
 - `art_data.py` — stratified ART / VLS coverage builders from ZAMPHIA 2016 + national totals
 - `run_hiv_calibration.py` — Optuna calibration driver (single canonical entry point; per-experiment `run.py` files just define `calib_pars` and call `run_and_save`)
 - `run_pn_scens.py` — scenario runner (Phase 3)
+- `recency_fermi.py`, `plot_recency_fermi.py`, `test_recency_fermi.py` — companion closed-form cost analysis of recency-triggered PN (see below)
 - `plot_calibrations.py`, `plot_zamphia_age_sex.py` — reproducible calibration figures
 - `data/` — Zambia demography, national HIV surveillance, ZAMPHIA 2016 age × sex prevalence / incidence / ART / VLS
 - `experiments/` — calibration provenance in a two-level `NN_epoch/NN_experiment/` scheme where an **epoch** is a structural model change (new data preprocessing, new module) and an **experiment** is a parameter change within an epoch. Each experiment folder holds `SUMMARY.md` (commit hash + `calib_pars` + fit table + notes) and `figures/`. Raw outputs stay gitignored; the recoverability contract is commit hash + `calib_pars`.
@@ -43,6 +44,18 @@ python plot_zamphia_age_sex.py        # 2 × 2 ZAMPHIA 2016 overlay (prev + inci
 ```
 
 Runtime: ~2–3 h on 50 workers.
+
+## Companion decision analysis
+
+`recency_fermi.py` is a closed-form (Fermi) cost model that asks whether recency-test triggering of enhanced partner notification earns its cost, independent of the transmission model. It compares, for a cohort of new diagnoses: RTRI for everyone with enhanced PN for the RTRI-recent; the same budget spent on untargeted enhanced PN; and enhanced PN for everyone. Targeting wins only if `cost_rtri < flag_rate × cost_pn × (enrichment − 1)`.
+
+```bash
+python recency_fermi.py        # validate against the original spreadsheet, print summary, write results/recency_fermi_*.csv
+python plot_recency_fermi.py   # figures/recency_fermi.png
+pytest test_recency_fermi.py
+```
+
+All functions broadcast over numpy arrays, so `rf.evaluate(sens=np.linspace(0, 1, 101))` or `rf.sweep(...)` gives sensitivity analyses directly. `data/recency_assays.csv` holds published MDRI / false-recent rates for current recency assays, used as a robustness check (sensitivity approximated as MDRI/365). Contact positivity (40% / 17%) is a structural placeholder and the input that drives the result; the ABM's recency-stratified PN yield is the natural replacement once Phase 2 lands.
 
 ## Related projects
 

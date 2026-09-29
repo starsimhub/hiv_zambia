@@ -63,7 +63,9 @@ Axis C (relationship-type slicing: stable / casual / commercial): *Needs researc
 - STIsim capability audit (2026-09-23): `sti.HIV.ti_infected` is a FloatArr, set at infection, cleared only on death — recency arithmetic `(sim.ti - ti_infected) < ss.months(12)` works cleanly. `sti.PriorPartners` at [stisim/networks/layered_networks.py:95](/home/robyn/stisim/stisim/networks/layered_networks.py#L95) with configurable `dur_recall` (default `ss.years(1)`); construction verified working with `dur_recall=ss.years(0.25)`.
 
 **Evidence still needed.**
-- (Phase 2) Literature reference to justify the 25 % sensitivity / 96 % specificity operational assumptions for the recency assay.
+- (Phase 2) Literature reference to justify the 25 % sensitivity / 96 % specificity operational assumptions for the recency assay. *Partly addressed 2026-09-29:* published MDRI / FRR for current assays are in `data/recency_assays.csv`. Implied sensitivity (MDRI/365) is 29–54 %, FRR 0.2–6 % among ART-naive, but 53–70 % among ART-experienced. So 25 % / 96 % is pessimistic on sensitivity and roughly right on field specificity once undisclosed prior ART is considered.
+
+**Companion decision analysis** *(Added 2026-09-29)*. `recency_fermi.py` — closed-form cost model of RTRI-targeted vs untargeted enhanced PN. At defaults, targeting costs 6.7× more per additional diagnosis than budget-matched untargeted PN; breakeven RTRI cost $0.45; 4–8× penalty across all published assay parameter sets. Contact positivity by index recency (40 % / 17 %) is a placeholder that the ABM should replace once `RecencyTest` exists.
 
 **Questions blocked on research.**
 - None currently blocking.
