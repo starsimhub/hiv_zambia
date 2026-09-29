@@ -11,7 +11,7 @@ from interventions import make_hiv_intvs
 # ss.options.warnings = 'error'
 
 
-def make_sim(seed=1, stop=2030, verbose=1/12, analyzers=None, use_calib=True, pn_pars=None, analyze_network=False, par_idx=0):
+def make_sim(seed=1, stop=2030, verbose=1/12, analyzers=None, use_calib=True, pn_pars=None, analyze_network=False, par_idx=0, calib_pars=None):
 
     nw = sti.StructuredSexual(
         prop_f0=0.79,
@@ -20,6 +20,7 @@ def make_sim(seed=1, stop=2030, verbose=1/12, analyzers=None, use_calib=True, pn
         m1_conc=0.15,
         p_pair_form=0.5,
         condom_data=pd.read_csv(f'data/condom_use.csv'),
+        recall_prior=True,
     )
     priorpartners = sti.PriorPartners(dur_recall=ss.years(0.25))
 
@@ -58,8 +59,10 @@ def make_sim(seed=1, stop=2030, verbose=1/12, analyzers=None, use_calib=True, pn
         verbose=verbose,
     )
 
-    # If using calibration parameters, apply them via stisim's default builder
-    if use_calib:
+    # Apply calibration parameters via stisim's default builder
+    if calib_pars is not None:
+        sim = sti.default_build_fn(sim, calib_pars)
+    elif use_calib:
         calib = sc.loadobj('raw_results/zam_hiv_calib.obj')
         calib_pars = calib.df.iloc[par_idx].to_dict()
         sim = sti.default_build_fn(sim, calib_pars)

@@ -59,6 +59,7 @@ def get_testing_products():
     partner_testing = sti.HIVTest(
         years=years,
         test_prob_data=0.9,
+        dt_scale=False,
         name='partner_testing',
         eligibility=ss.uids(),  # Set by partner notification intervention
         label='partner_testing',
@@ -118,6 +119,12 @@ class PartnerNotification(ss.Intervention):
             previous=sim.networks.priorpartners,  # Prior sexual network
         )
 
+    def init_results(self):
+        super().init_results()
+        self.define_results(
+            ss.Result('new_attended', dtype=int, label='Partners attended after PN', auto_plot=False),
+        )
+
     def identify_contacts(self, uids):
         # Return UIDs of people that have been identified as contacts and should be notified
 
@@ -146,6 +153,7 @@ class PartnerNotification(ss.Intervention):
 
             # Store contacts
             self.ti_notified[attending_m | attending_f] = self.ti
+            self.results['new_attended'][self.ti] += len(attending_m) + len(attending_f)
             self.contacts[nwtype].mf = mf_pairs
             self.contacts[nwtype].fm = fm_pairs
 
@@ -177,7 +185,7 @@ class PartnerNotification(ss.Intervention):
 def make_hiv_intvs(pn_pars=None):
 
     from art_data import build_art_coverage, build_vls_coverage
-    art_coverage = build_art_coverage(sim_start=1985, sim_end=2030, p_art_projected=0.95)
+    art_coverage = build_art_coverage(sim_start=1985, sim_end=2051, p_art_projected=0.95)
     art_vls = build_vls_coverage()
     # n_vmmc = pd.read_csv(f'data/n_vmmc.csv').set_index('year')
     fsw_testing, other_testing, low_cd4_testing, partner_testing, anc_testing = get_testing_products()
